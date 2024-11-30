@@ -11,12 +11,12 @@ namespace BudgetManager.ViewModels
 {
     public class AddEditCostViewModel : INotifyPropertyChanged
     {
-        private string _id = string.Empty; // Domyślna wartość
-        private string _type = string.Empty; // Domyślna wartość
+        private string _id = string.Empty;
+        private string _type = string.Empty;
         private string? _selectedCategory;
-        private string _amount = string.Empty; // Domyślna wartość
+        private string _amount = string.Empty;
         private DateTime? _date = DateTime.Now;
-        private string _description = string.Empty; // Domyślna wartość
+        private string _description = string.Empty;
         private string? _selectedPaymentInterval;
         private string? _selectedImportanceLevel;
         private bool _isEditing;
@@ -25,7 +25,6 @@ namespace BudgetManager.ViewModels
 
         public AddEditCostViewModel(Cost? cost)
         {
-            // Domyślne wartości
             _id = string.Empty;
             _type = string.Empty;
             _amount = string.Empty;
@@ -40,12 +39,12 @@ namespace BudgetManager.ViewModels
             if (cost != null)
             {
                 IsEditing = true;
-                ID = cost.ID ?? string.Empty; // Domyślna wartość
-                Type = cost.Type ?? string.Empty; // Domyślna wartość
+                ID = cost.ID ?? string.Empty;
+                Type = cost.Type ?? string.Empty;
                 SelectedCategory = cost.Category;
                 Amount = cost.Amount.ToString(CultureInfo.InvariantCulture);
                 Date = cost.Date;
-                Description = cost.Description ?? string.Empty; // Domyślna wartość
+                Description = cost.Description ?? string.Empty;
 
                 if (cost is FixedCost fixedCost)
                 {

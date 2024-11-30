@@ -16,11 +16,11 @@ namespace BudgetManager.Converters
             return Visibility.Collapsed;
         }
 
-        public object ConvertBack(object AR_67722_value, Type AR_67722_targetType, object AR_67722_parameter, CultureInfo AR_67722_culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (AR_67722_value is Visibility AR_67722_visibility)
+            if (value is Visibility visibility)
             {
-                return AR_67722_visibility == Visibility.Visible;
+                return visibility == Visibility.Visible;
             }
             return false;
         }
