@@ -1,0 +1,157 @@
+﻿<mah:MetroWindow x:Class="BudgetManager.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="clr-namespace:BudgetManager"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" xmlns:viewmodels="clr-namespace:BudgetManager.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+                 mc:Ignorable="d"
+    Title="BudgetManager" Height="500" Width="1500">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Add fixed cost" Grid.Column="1" Command="{Binding AddCostCommand}" CommandParameter="Fixed" Style="{StaticResource CustomButtonStyle}"/>
+        <Button Content="Add variable cost" Grid.Column="2" Grid.ColumnSpan="2" Command="{Binding AddCostCommand}" CommandParameter="Variable" Style="{StaticResource CustomButtonStyle}"/>
+        <Button Content="Statistics" Grid.Column="4" Grid.ColumnSpan="2" Command="{Binding ShowStatisticsMessageCommand}" Style="{StaticResource CustomButtonStyle}"/>
+        <Button Content="Settings" Grid.Column="6" Command="{Binding ShowSettingsMessageCommand}" Style="{StaticResource CustomButtonStyle}"/>
+        <Button Content="Close" Grid.Column="7" Command="{Binding CloseCommand}" Style="{StaticResource CustomButtonStyle}"/>
+
+        <ComboBox Grid.Row="2" Grid.Column="0" Margin="5"
+                  ItemsSource="{Binding FilterTypes}" 
+                  SelectedItem="{Binding FilterType, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Style="{StaticResource CustomTextBoxStyle}"
+                 mah:TextBoxHelper.Watermark="Category" 
+                 Text="{Binding FilterCategory, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="2" Grid.Column="2" Margin="5" Style="{StaticResource CustomTextBoxStyle}"
+                 mah:TextBoxHelper.Watermark="Min Amount" 
+                 Text="{Binding FilterMinAmount, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="2" Grid.Column="3" Margin="5" Style="{StaticResource CustomTextBoxStyle}"
+                 mah:TextBoxHelper.Watermark="Max Amount" 
+                 Text="{Binding FilterMaxAmount, UpdateSourceTrigger=PropertyChanged}"/>
+        <DatePicker Grid.Row="2" Grid.Column="4" Margin="5" Style="{StaticResource CustomDatePickerStyle}"
+                    mah:TextBoxHelper.Watermark="Min Date"
+                    SelectedDate="{Binding FilterStartDate, UpdateSourceTrigger=PropertyChanged}"/>
+        <DatePicker Grid.Row="2" Grid.Column="5" Margin="5" Style="{StaticResource CustomDatePickerStyle}"
+                    mah:TextBoxHelper.Watermark="Max Date"
+                    SelectedDate="{Binding FilterEndDate, UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Grid.Row="2" Grid.Column="6" Margin="5" Style="{StaticResource CustomComboBoxStyle}"
+                  ItemsSource="{Binding FilterPaymentIntervals}" 
+                  SelectedItem="{Binding FilterPaymentInterval, UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Grid.Row="2" Grid.Column="7" Margin="5" Style="{StaticResource CustomComboBoxStyle}"
+                  ItemsSource="{Binding FilterImportanceLevels}" 
+                  SelectedItem="{Binding FilterImportanceLevel, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <ListView Grid.Row="3" Grid.ColumnSpan="8" Margin="5" ItemsSource="{Binding CollectionView}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource CustomListViewItemStyle}">
+                    <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="Edit Cost"
+                                  Command="{Binding PlacementTarget.Tag.EditCostCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                  CommandParameter="{Binding}"/>
+                                <MenuItem Header="Delete Cost"
+                                  Command="{Binding PlacementTarget.Tag.DeleteCostCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                  CommandParameter="{Binding}"/>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Type" Width="240">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource CustomGridViewColumnHeaderStyle}">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Type}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Category" Width="250">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource CustomGridViewColumnHeaderStyle}">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Category}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Amount" Width="250">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource CustomGridViewColumnHeaderStyle}">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Amount}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Date" Width="250">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource CustomGridViewColumnHeaderStyle}">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Date, StringFormat='yyyy-MM-dd'}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Description" Width="490">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource CustomGridViewColumnHeaderStyle}">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Description}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="8" Style="{StaticResource EmptyMessageTextBlockStyle}" Visibility="{Binding IsEmptyMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            No costs available, add the first cost.
+        </TextBlock>
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="8" Style="{StaticResource EmptyMessageTextBlockStyle}" Visibility="{Binding IsFilteredMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            No results, change the filters.
+        </TextBlock>
+
+        <TextBlock Grid.Row="4" Grid.ColumnSpan="8" Style="{StaticResource TotalTextBlockStyle}">
+            Total: <TextBlock Text="{Binding TotalAmount}" />
+        </TextBlock>
+    </Grid>
+</mah:MetroWindow>

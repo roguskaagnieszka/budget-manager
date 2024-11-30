@@ -1,0 +1,41 @@
+﻿<mah:MetroWindow x:Class="BudgetManager.Views.CostWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+    xmlns:viewmodels="clr-namespace:BudgetManager.ViewModels" 
+    d:DataContext="{d:DesignInstance Type=viewmodels:AddEditCostViewModel}"
+    mc:Ignorable="d"
+    Title="CostWindow" Height="450" Width="800">
+
+    <StackPanel Margin="20">
+        <ComboBox Style="{StaticResource CustomComboBoxStyle}" mah:TextBoxHelper.Watermark="Category"
+            ItemsSource="{Binding Categories}" 
+            SelectedItem="{Binding SelectedCategory, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Style="{StaticResource CustomTextBoxStyle}" mah:TextBoxHelper.Watermark="Amount" 
+            Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"/>
+        <DatePicker Style="{StaticResource CustomDatePickerStyle}"
+            SelectedDate="{Binding Date, Mode=TwoWay}"/>
+        <TextBox Style="{StaticResource CustomTextBoxStyle}" mah:TextBoxHelper.Watermark="Description" 
+            Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            MaxLength="500"/>
+        <!-- Fixed Cost Specific Fields -->
+        <StackPanel Visibility="{Binding Type, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Fixed}">
+            <ComboBox Style="{StaticResource CustomComboBoxStyle}" mah:TextBoxHelper.Watermark="Payment Interval"
+                ItemsSource="{Binding PaymentIntervals}"
+                SelectedItem="{Binding SelectedPaymentInterval, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!-- Variable Cost Specific Fields -->
+        <StackPanel Visibility="{Binding Type, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Variable}">
+            <ComboBox Style="{StaticResource CustomComboBoxStyle}" mah:TextBoxHelper.Watermark="Importance Level"
+                ItemsSource="{Binding ImportanceLevels}"
+                SelectedItem="{Binding SelectedImportanceLevel, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <StackPanel Style="{StaticResource CustomHorizontalStackPanelStyle}">
+            <Button Style="{StaticResource CustomButtonStyle}" Content="Save" Command="{Binding SaveCommand}" Margin="0,10,5,0" Width="80"/>
+            <Button Style="{StaticResource CustomButtonStyle}" Content="Cancel" Command="{Binding CancelCommand}" Margin="0,10,0,0" Width="80"/>
+        </StackPanel>
+    </StackPanel>
+</mah:MetroWindow>
